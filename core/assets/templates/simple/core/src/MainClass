@@ -1,0 +1,16 @@
+package %PACKAGE%;
+
+import io.anuke.ucore.modules.Core;
+import io.anuke.ucore.core.DrawContext;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class %MAIN_CLASS% extends Core {
+	
+	@Override
+	public void init(){
+		DrawContext.batch = new SpriteBatch();
+		add(new UI());
+	}
+	
+}
