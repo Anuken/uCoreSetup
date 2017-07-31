@@ -25,7 +25,7 @@ public class UI extends SceneModule{
 	ProjectBuilder builder;
 	List<ProjectType> projects = new ArrayList<>();
 	List<ProjectDependency> dependencies = new ArrayList<>();
-	String projectName = "Test";
+	String projectName = "Game";
 	String packageName = !home ? "some.package" : "io.anuke.test";
 	String destination = !home ? System.getProperty("user.home") : "/home/anuke/Projects/Test";
 	String[] templates = {"default", "gamejam", "simple"};

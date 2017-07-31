@@ -1,3 +1,9 @@
+##Packr, build stuff
+
+/deploy/
+/desktop/packr-out/
+/desktop/packr-export/
+
 ## Java
 
 *.class
