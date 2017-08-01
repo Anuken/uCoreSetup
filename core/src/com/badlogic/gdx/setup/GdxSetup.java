@@ -278,7 +278,7 @@ public class GdxSetup {
 		}
 
 		// Assets
-		String assetPath = builder.modules.contains(ProjectType.ANDROID) ? "android/assets" : "core/assets";
+		String assetPath = /*builder.modules.contains(ProjectType.ANDROID) ? "android/assets" : */"core/assets";
 		//project.files.add(new ProjectFile(template, "android/assets/badlogic.jpg", assetPath + "/badlogic.jpg", false));
 
 		// android project
