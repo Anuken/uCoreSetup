@@ -17,6 +17,7 @@
 package com.badlogic.gdx.setup;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 import javax.swing.JOptionPane;
@@ -231,7 +232,7 @@ public class GdxSetup {
 		}
 	}
 
-	public void build (ProjectBuilder builder, String template, String outputDir, String appName, String packageName, String mainClass,
+	public void build (ProjectBuilder builder, String fromTemplate, String outputDir, String appName, String packageName, String mainClass,
 		String sdkLocation, CharCallback callback, List<String> gradleArgs) {
 		Project project = new Project();
 
@@ -241,6 +242,8 @@ public class GdxSetup {
 		if (!isSdkLocationValid(sdkLocation)) {
 			System.out.println("Android SDK location '" + sdkLocation + "' doesn't contain an SDK");
 		}
+		
+		String template = "base";
 
 		// root dir/gradle files
 		project.files.add(new ProjectFile(template, "gitignore", ".gitignore", false));
@@ -256,18 +259,33 @@ public class GdxSetup {
 		project.files.add(new ProjectFile(template, "core/build.gradle"));
 		project.files.add(new ProjectFile(template, "core/.classpath"));
 		
-		FileHandle src = Gdx.files.internal("templates/" + template + "/core/src/files");
+		FileHandle src = Gdx.files.internal("templates/" + fromTemplate + "/core/src/files");
 		
 		String[] files = src.readString().replace("\n", "").split(",");
 		
-		project.files.add(new ProjectFile(template, "core/src/MainClass", "core/src/" + packageDir + "/" + mainClass + ".java", true));
+		project.files.add(new ProjectFile(fromTemplate, "MainClass", "core/src/" + packageDir + "/" + mainClass + ".java", true));
 		
 		for(String sourcefile : files){
-			project.files.add(new ProjectFile(template, "core/src/"+sourcefile, "core/src/" + packageDir + "/"+sourcefile+".java", true));
+			project.files.add(new ProjectFile(fromTemplate, ""+sourcefile, "core/src/" + packageDir + "/"+sourcefile+".java", true));
 		}
 		
 		if (builder.modules.contains(ProjectType.HTML)) {
 			project.files.add(new ProjectFile(template, "core/CoreGdxDefinition", "core/src/" + mainClass + ".gwt.xml", true));
+		}
+		
+		String[] fileDirs = {"assets", "assets-raw"};
+		
+		try{
+			for(String dir : fileDirs){
+				dir = "base/" + dir + "/files";
+			
+				Files.readAllLines(new File(dir).toPath()).forEach(respath->{
+					
+				});
+			}
+		
+		}catch (IOException e){
+			throw new RuntimeException(e);
 		}
 
 		// desktop project
