@@ -106,6 +106,7 @@ eclipse {
     project {
         name = appName + "-android"
         natures 'com.android.ide.eclipse.adt.AndroidNature'
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/%ASSET_PATH%'
         buildCommands.clear();
         buildCommand "com.android.ide.eclipse.adt.ResourceManagerBuilder"
         buildCommand "com.android.ide.eclipse.adt.PreCompilerBuilder"

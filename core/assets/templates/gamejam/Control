@@ -14,7 +14,7 @@ import io.anuke.ucore.modules.RendererModule;
 public class Control extends RendererModule{
 	
 	public Control(){
-		atlas = new Atlas("test.pack");
+		atlas = new Atlas("sprites.atlas");
 	
 		KeyBinds.defaults(
 			"up", Keys.W,

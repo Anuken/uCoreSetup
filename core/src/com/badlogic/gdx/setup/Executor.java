@@ -16,10 +16,7 @@
 
 package com.badlogic.gdx.setup;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Executor {
 	public interface CharCallback {
@@ -31,9 +28,12 @@ public class Executor {
 	public static boolean execute (File workingDir, String windowsFile, String unixFile, String parameters, CharCallback callback) {
 		String exec = workingDir.getAbsolutePath() + "/" + (System.getProperty("os.name").contains("Windows") ? windowsFile : unixFile);
 		String log = "Executing '" + exec + " " + parameters + "'";
+		
 		for(int i = 0; i < log.length(); i++) {
-			callback.character(log.charAt(i));
+			if(callback != null)
+				callback.character(log.charAt(i));
 		}
+		if(callback != null)
 		callback.character('\n');
 		
 		String[] params = parameters.split(" ");
@@ -49,13 +49,14 @@ public class Executor {
 	private static boolean startProcess (String[] commands, File directory, final CharCallback callback) {
 		try {
 			final Process process = new ProcessBuilder(commands).redirectErrorStream(true).directory(directory).start();
-
+			
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run () {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()), 1);
 					try {
 						int c = 0;
+						if(callback != null)
 						while ((c = reader.read()) != -1) {
 							callback.character((char)c);						
 						}

@@ -17,11 +17,11 @@
 package com.badlogic.gdx.setup;
 
 
-import com.badlogic.gdx.setup.DependencyBank.ProjectType;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
+
+import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 
 public class BuildScriptHelper {
 
@@ -40,6 +40,7 @@ public class BuildScriptHelper {
 		write(wr, "dependencies {");
 		if (projects.contains(ProjectType.HTML)) {
 			write(wr, "classpath '" + DependencyBank.gwtPluginImport + "'");
+			write(wr, "classpath 'org.akhikhl.gretty:gretty:+'");
 		}
 		if (projects.contains(ProjectType.ANDROID)) {
 			write(wr, "classpath '" + DependencyBank.androidPluginImport + "'");

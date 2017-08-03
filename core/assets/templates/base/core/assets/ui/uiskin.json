@@ -54,8 +54,6 @@ io.anuke.ucore.scene.ui.SplitPane$SplitPaneStyle: {
 },
 io.anuke.ucore.scene.ui.Window$WindowStyle: {
 	default: {titleFont: default-font, background: window, titleFontColor: orange },
-	resizable: {background: window-resizable, titleFont: default-font, titleFontColor: white },
-	noborder: {background: window-noborder, titleFont: default-font, titleFontColor: white },
 	dialog: {stageBackground: dialogDim, titleFont: default-font, background: window, titleFontColor: white }
 },
 io.anuke.ucore.scene.ui.KeybindDialog$KeybindDialogStyle: {
@@ -80,9 +78,6 @@ io.anuke.ucore.scene.ui.CheckBox$CheckBoxStyle: {
 },
 io.anuke.ucore.scene.ui.List$ListStyle: {
 	default: {fontColorUnselected: white, selection: padded-list-selection, fontColorSelected: white, font: default-font }
-},
-io.anuke.ucore.scene.ui.Touchpad$TouchpadStyle: {
-	default: {background: default-pane, knob: touchpad-knob }
 },
 io.anuke.ucore.scene.ui.Tree$TreeStyle: {
 	default: {minus: tree-minus, plus: tree-plus, selection: tree-selection, over: tree-over }

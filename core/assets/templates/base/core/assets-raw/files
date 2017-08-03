@@ -3,6 +3,7 @@ assets-raw/ui/progressbar-vertical.png
 assets-raw/ui/check-on.png
 assets-raw/ui/tree-selection.9.png
 assets-raw/ui/splitpane.png
+assets-raw/ui/border.9.png
 assets-raw/ui/progressbar-filled-vertical.png
 assets-raw/ui/slider-knob.png
 assets-raw/ui/scroll-horizontal.9.png
@@ -49,4 +50,6 @@ assets-raw/ui/blank.png
 assets-raw/ui/textfield-over.9.png
 assets-raw/ui/select-up.png
 assets-raw/ui/slider-vertical.png
+assets-raw/sprites/pack.json
+assets-raw/sprites/error.png
 assets-raw/sprites/blank.png

@@ -18,6 +18,7 @@ import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Strings;
+import io.anuke.ucore.util.Timers;
 
 //TODO gamejam ecs template?
 public class UI extends SceneModule{
@@ -25,7 +26,7 @@ public class UI extends SceneModule{
 	ProjectBuilder builder;
 	List<ProjectType> projects = new ArrayList<>();
 	List<ProjectDependency> dependencies = new ArrayList<>();
-	String projectName = "Game";
+	String projectName = "Test";
 	String packageName = !home ? "some.package" : "io.anuke.test";
 	String destination = !home ? System.getProperty("user.home") : "/home/anuke/Projects/Test";
 	String[] templates = {"default", "gamejam", "simple"};
@@ -100,7 +101,6 @@ public class UI extends SceneModule{
 					ButtonGroup<CheckBox> group = new ButtonGroup<>();
 					
 					for(String type : templates){
-						
 						new checkbox(Strings.capitalize(type), 
 								type.equals(template), b->{
 									
@@ -283,6 +283,9 @@ public class UI extends SceneModule{
 				buildDialog.pack();
 				
 				buildDialog.button("OK", true);
+				buildDialog.getButtonTable().addButton("Exit", ()->{
+					Gdx.app.exit();
+				});
 			});
 		}).start();
 		
@@ -302,7 +305,7 @@ public class UI extends SceneModule{
 		
 		buildLabel.getText().append(c);
 		
-		if(lastc > 55){
+		if(lastc > 62){
 			buildLabel.getText().append("\n");
 			lastc = 0;
 		}else{
@@ -314,6 +317,7 @@ public class UI extends SceneModule{
 	public void update(){
 		clearScreen(Color.BLACK);
 		super.update();
+		Timers.update();
 	}
 	
 }

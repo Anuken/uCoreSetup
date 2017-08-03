@@ -17,7 +17,6 @@
 package com.badlogic.gdx.setup;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.*;
 
 import javax.swing.JOptionPane;
@@ -27,6 +26,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.setup.DependencyBank.ProjectDependency;
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 import com.badlogic.gdx.setup.Executor.CharCallback;
+
+import io.anuke.ucore.UCore;
 
 /** Command line tool to generate libgdx projects
  * @author badlogic
@@ -259,7 +260,7 @@ public class GdxSetup {
 		project.files.add(new ProjectFile(template, "core/build.gradle"));
 		project.files.add(new ProjectFile(template, "core/.classpath"));
 		
-		FileHandle src = Gdx.files.internal("templates/" + fromTemplate + "/core/src/files");
+		FileHandle src = Gdx.files.internal("templates/" + fromTemplate + "/files");
 		
 		String[] files = src.readString().replace("\n", "").split(",");
 		
@@ -275,22 +276,19 @@ public class GdxSetup {
 		
 		String[] fileDirs = {"assets", "assets-raw"};
 		
-		try{
-			for(String dir : fileDirs){
-				dir = "base/" + dir + "/files";
+		for(String dir : fileDirs){
+			dir = "templates/base/core/" + dir + "/files";
+			FileHandle file = Gdx.files.internal(dir);
+			String[] lines = file.readString().split("\n");
 			
-				Files.readAllLines(new File(dir).toPath()).forEach(respath->{
-					
-				});
+			for(String respath : lines){
+				project.files.add(new ProjectFile(template, "core/" + respath, false));
 			}
-		
-		}catch (IOException e){
-			throw new RuntimeException(e);
 		}
 
 		// desktop project
 		if (builder.modules.contains(ProjectType.DESKTOP)) {
-			project.files.add(new ProjectFile(template, "desktop/.classpath"));
+			project.files.add(new ProjectFile(template, "desktop/classpath", "desktop/.classpath", true));
 			project.files.add(new ProjectFile(template, "desktop/build.gradle"));
 			project.files.add(new ProjectFile(template, "desktop/src/DesktopLauncher", "desktop/src/" + packageDir + "/desktop/DesktopLauncher.java", true));
 		}
@@ -301,6 +299,7 @@ public class GdxSetup {
 
 		// android project
 		if (builder.modules.contains(ProjectType.ANDROID)) {
+			project.files.add(new ProjectFile(template, "android/classpath", "android/.classpath", true));
 			project.files.add(new ProjectFile(template, "android/res/values/strings.xml"));
 			project.files.add(new ProjectFile(template, "android/res/values/styles.xml", false));
 			project.files.add(new ProjectFile(template, "android/res/drawable-hdpi/ic_launcher.png", false));
@@ -399,7 +398,7 @@ public class GdxSetup {
 
 		Executor.execute(new File(outputDir), "gradlew.bat", "gradlew", "clean" + parseGradleArgs(builder.modules, gradleArgs), callback);
 	}
-
+	
 	private void copyAndReplace (String outputDir, Project project, Map<String, String> values) {
 		File out = new File(outputDir);
 		if (!out.exists() && !out.mkdirs()) {
@@ -412,7 +411,7 @@ public class GdxSetup {
 	}
 
 	private byte[] readResource (String resource, String path) {
-		
+		//kek
 		return Gdx.files.internal(path + resource).readBytes();
 		/*
 		InputStream in = null;
@@ -500,6 +499,9 @@ public class GdxSetup {
 
 	private void copyFile (ProjectFile file, File out, Map<String, String> values) {
 		File outFile = new File(out, file.outputName);
+		
+		UCore.log("Copying", file.resourceLoc + file.resourceName, "to", outFile);
+		
 		if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
 			throw new RuntimeException("Couldn't create dir '" + outFile.getAbsolutePath() + "'");
 		}
@@ -513,6 +515,10 @@ public class GdxSetup {
 			} else {
 				txt = readResourceAsString(file.resourceName, file.resourceLoc);
 			}
+			
+			if(txt.contains("test.pack"))
+				UCore.log(outFile.getAbsolutePath());
+			
 			txt = replace(txt, values);
 			writeFile(outFile, txt);
 		} else {

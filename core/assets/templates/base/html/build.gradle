@@ -1,5 +1,5 @@
 apply plugin: "java"
-apply plugin: "jetty"
+apply plugin: 'org.akhikhl.gretty'
 
 gwt {
     gwtVersion='%GWT_VERSION%' // Should match the gwt version used for building the gwt backend
@@ -60,8 +60,10 @@ draftWar {
    from "war"
 }
 
-task addSource << {
-	sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+task addSource{
+	doLast{
+		sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+	}
 }
 
 tasks.compileGwt.dependsOn(addSource)
