@@ -12,13 +12,13 @@ import com.badlogic.gdx.setup.DependencyBank.ProjectDependency;
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 import com.badlogic.gdx.setup.Executor.CharCallback;
 
-import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.core.Core;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Strings;
-import io.anuke.ucore.util.Timers;
 
 //TODO gamejam ecs template?
 public class UI extends SceneModule{
@@ -40,7 +40,7 @@ public class UI extends SceneModule{
 	
 	@Override
 	public void init(){
-		DrawContext.font.setUseIntegerPositions(true);
+		Core.font.setUseIntegerPositions(true);
 		
 		projects.add(ProjectType.CORE);
 		projects.add(ProjectType.DESKTOP);

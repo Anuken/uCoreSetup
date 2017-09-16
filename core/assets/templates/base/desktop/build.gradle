@@ -6,7 +6,7 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "%PACKAGE%.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../%ASSET_PATH%");
 
-def PACKR_DIR = "/home/anuke/Documents/Packr/"
+def PACKR_DIR = "$System.env.PACKR_DIR"
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName

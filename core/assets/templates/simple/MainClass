@@ -1,11 +1,11 @@
 package %PACKAGE%;
 
-import io.anuke.ucore.modules.Core;
+import io.anuke.ucore.modules.CoreModule;
 import io.anuke.ucore.core.DrawContext;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class %MAIN_CLASS% extends Core {
+public class %MAIN_CLASS% extends CoreModule {
 	
 	@Override
 	public void init(){

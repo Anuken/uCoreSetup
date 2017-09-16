@@ -41,7 +41,7 @@ task dist(dependsOn: [clean, compileGwt]) {
         copy {
             from "webapp"
             into "build/dist"
-            }
+        }
         copy {
             from "war"
             into "build/dist"
@@ -55,6 +55,11 @@ task distZip(type: Zip, dependsOn: dist){
     destinationDir(file("build/dist-zipped"))
 }
 
+eclipseWtpFacet.doLast{
+	delete{
+		delete '.settings/org.eclipse.wst.common.project.facet.core.xml'
+	}
+}
 
 draftWar {
    from "war"

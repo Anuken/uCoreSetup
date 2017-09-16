@@ -9,9 +9,9 @@ import io.anuke.ucore.core.KeyBinds;
 import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Atlas;
-import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.modules.ControlModule;
 
-public class Control extends RendererModule{
+public class Control extends ControlModule{
 	
 	public Control(){
 		atlas = new Atlas("sprites.atlas");
@@ -28,7 +28,7 @@ public class Control extends RendererModule{
 
 		Entities.initPhysics();
 		
-		EffectLoader.load();
+		EffectCreator.create();
 	
 	}
 	

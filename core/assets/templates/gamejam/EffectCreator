@@ -8,7 +8,7 @@ import io.anuke.ucore.graphics.Hue;
 
 public class EffectLoader{
 	
-	public static void load(){
+	public static void create(){
 		
 		Effects.create("explosion", 10, e->{
 			Draw.color(Color.YELLOW);

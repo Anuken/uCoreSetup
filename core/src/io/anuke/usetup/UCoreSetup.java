@@ -2,14 +2,14 @@ package io.anuke.usetup;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import io.anuke.ucore.core.DrawContext;
-import io.anuke.ucore.modules.Core;
+import io.anuke.ucore.core.Core;
+import io.anuke.ucore.modules.ModuleCore;
 
-public class UCoreSetup extends Core {
+public class UCoreSetup extends ModuleCore {
 	
 	@Override
 	public void init(){
-		DrawContext.batch = new SpriteBatch();
+		Core.batch = new SpriteBatch();
 		add(new UI());
 	}
 	
