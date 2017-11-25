@@ -1,5 +1,8 @@
 apply plugin: "java"
-apply plugin: 'org.akhikhl.gretty'
+
+import org.wisepersist.gradle.plugins.gwt.GwtSuperDev
+def HttpFileServer server = null
+def httpfilePort = 9090
 
 gwt {
     gwtVersion='%GWT_VERSION%' // Should match the gwt version used for building the gwt backend
@@ -9,7 +12,6 @@ gwt {
     src = files(file("src/")) // Needs to be in front of "modules" below.
     modules '%PACKAGE%.GdxDefinition'
     devModules '%PACKAGE%.GdxDefinitionSuperdev'
-    project.webAppDirName = 'webapp'
 
     compiler {
         strict = true;
@@ -17,17 +19,32 @@ gwt {
     }
 }
 
-task draftRun(type: JettyRunWar) {
-    dependsOn draftWar
-    dependsOn.remove('war')
-    webApp=draftWar.archivePath
-    daemon=true
+task startHttpServer() {
+    dependsOn draftCompileGwt
+
+    String output = project.buildDir.path + "/gwt/draftOut";
+
+    doLast {
+        copy {
+            from "webapp"
+            into output
+        }
+
+        copy {
+            from "war"
+            into output
+        }
+
+        server = new SimpleHttpFileServerFactory().start(new File(output), httpfilePort)
+
+        println "Server started in directory " + server.getContentRoot() + ", port " + server.getPort()
+    }
 }
 
-task superDev(type: de.richsource.gradle.plugins.gwt.GwtSuperDev) {
-    dependsOn draftRun
+task superDev(type: GwtSuperDev) {
+    dependsOn startHttpServer
     doFirst {
-    	gwt.modules = gwt.devModules
+        gwt.modules = gwt.devModules
     }
 }
 
@@ -61,14 +78,10 @@ eclipseWtpFacet.doLast{
 	}
 }
 
-draftWar {
-   from "war"
-}
-
-task addSource{
-	doLast{
-		sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
-	}
+task addSource {
+    doLast {
+        sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+    }
 }
 
 tasks.compileGwt.dependsOn(addSource)

@@ -282,7 +282,7 @@ public class UI extends SceneModule{
 				buildDialog.content().invalidateHierarchy();
 				buildDialog.pack();
 				
-				buildDialog.button("OK", true);
+				buildDialog.addButton("OK", ()->buildDialog.hide());
 				buildDialog.getButtonTable().addButton("Exit", ()->{
 					Gdx.app.exit();
 				});

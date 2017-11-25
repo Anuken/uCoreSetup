@@ -27,8 +27,6 @@ public class Control extends ControlModule{
 		Settings.loadAll("%PACKAGE%");
 
 		Entities.initPhysics();
-		
-		EffectCreator.create();
 	
 	}
 	
