@@ -12,6 +12,7 @@ import com.badlogic.gdx.setup.DependencyBank.ProjectDependency;
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 import com.badlogic.gdx.setup.Executor.CharCallback;
 
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.modules.SceneModule;
@@ -20,7 +21,6 @@ import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Strings;
 
-//TODO gamejam ecs template?
 public class UI extends SceneModule{
 	boolean home = System.getProperty("user.name").equals("anuke");
 	ProjectBuilder builder;
@@ -47,6 +47,10 @@ public class UI extends SceneModule{
 		projects.add(ProjectType.HTML);
 		
 		dependencies.add(ProjectDependency.GDX);
+		dependencies.add(ProjectDependency.CONTROLLERS);
+		dependencies.add(ProjectDependency.UCORE);
+
+		UCore.log(dependencies);
 		
 		Gdx.graphics.setContinuousRendering(false);
 		
@@ -89,9 +93,9 @@ public class UI extends SceneModule{
 			row();
 			
 			new table("button"){{
-				padTop(12);
+				marginTop(12);
+				margin(14);
 				aleft();
-				get().pad(14);
 				
 				new label("Template:").left().padBottom(6).left();
 				
@@ -116,9 +120,9 @@ public class UI extends SceneModule{
 			row();
 			
 			new table("button"){{
-				padTop(12);
+				marginTop(12);
+				margin(14);
 				aleft();
-				get().pad(14);
 				
 				new label("Sub-projects:").left().padBottom(6).left();
 				
@@ -128,7 +132,6 @@ public class UI extends SceneModule{
 					for(ProjectType type : ProjectType.values()){
 						new checkbox(Strings.capitalize(type.getName()), 
 								projects.contains(type), b->{
-									
 							if(b){
 								projects.add(type);
 							}else{
@@ -143,8 +146,8 @@ public class UI extends SceneModule{
 			row();
 			
 			new table("button"){{
-				padTop(12);
-				get().pad(14);
+				marginTop(12);
+				margin(14);
 				
 				new label("Extensions:").left().padBottom(6);
 				
@@ -167,9 +170,8 @@ public class UI extends SceneModule{
 					
 					current.addCheck(Strings.capitalize(depend[i].name().toLowerCase()), 
 							dependencies.contains(depend[i]), b->{
-						
 						if(b){
-							dependencies.add(depend[idx]);
+							if(!dependencies.contains(depend[idx])) dependencies.add(depend[idx]);
 						}else{
 							dependencies.remove(depend[idx]);
 						}
@@ -189,7 +191,7 @@ public class UI extends SceneModule{
 		new table(){{
 			atop().aright();
 			
-			get().padTop(0).padRight(0);
+			marginTop(0).marginRight(0);
 			
 			float sz = 50;
 			
@@ -217,8 +219,9 @@ public class UI extends SceneModule{
 		
 		List<Dependency> list = new ArrayList<>();
 		
-		for(ProjectDependency dep : dependencies)
+		for(ProjectDependency dep : dependencies) {
 			list.add(bank.getDependency(dep));
+		}
 		
 		List<String> incompat = builder.buildProject(projects, list);
 		
@@ -237,9 +240,7 @@ public class UI extends SceneModule{
 				build();
 			});
 			
-			dialog.getButtonTable().addButton("Cancel", ()->{
-				dialog.hide();
-			});
+			dialog.getButtonTable().addButton("Cancel", dialog::hide);
 			
 			dialog.show();
 		}else{
@@ -262,30 +263,41 @@ public class UI extends SceneModule{
 		lastc = 0;
 		buildDialog = new Dialog("Project Log", "dialog");
 		buildLabel = new Label("");
+
+		Table inner = new Table();
+		inner.add(buildLabel);
+
+		ScrollPane pane = new ScrollPane(inner);
+		pane.setFadeScrollBars(false);
 		
-		buildDialog.content().add(buildLabel).padTop(8);
+		buildDialog.content().add(pane).grow().padTop(8);
 		
 		new Thread(()->{
 			printlog("Generating app in " + destination + "...");
 
-			new GdxSetup().build(builder, template, destination, projectName, packageName, projectName, "/home/anuke/Android/Sdk", new CharCallback() {
-				@Override
-				public void character (char c) {
-					printlog(c);
-				}
-			}, new ArrayList<String>());
+			try {
+				new GdxSetup().build(builder, template, destination, projectName, packageName,
+						projectName, "/home/anuke/Android/Sdk", this::printlog, new ArrayList<>());
+			}catch (Exception e){
+				Gdx.app.postRunnable(() -> {
+					Dialog d = new Dialog("Error generating project!", "dialog");
+					d.content().add(Strings.parseException(e, true));
+					d.addCloseButton();
+					d.show();
+				});
+				return;
+			}
+
 			printlog("Done!");
 			
 			Gdx.app.postRunnable(()->{
-				buildLabel.pack();
+				buildLabel.invalidateHierarchy();
 				buildDialog.invalidateHierarchy();
 				buildDialog.content().invalidateHierarchy();
 				buildDialog.pack();
 				
-				buildDialog.addButton("OK", ()->buildDialog.hide());
-				buildDialog.getButtonTable().addButton("Exit", ()->{
-					Gdx.app.exit();
-				});
+				buildDialog.buttons().addButton("OK", buildDialog::hide);
+				buildDialog.buttons().addButton("Exit", Gdx.app::exit);
 			});
 		}).start();
 		
@@ -300,17 +312,19 @@ public class UI extends SceneModule{
 	
 	void printlog(char c){
 		System.out.print(c);
-		
-		if(c == '\n') lastc = 0;
-		
-		buildLabel.getText().append(c);
-		
-		if(lastc > 62){
-			buildLabel.getText().append("\n");
-			lastc = 0;
-		}else{
-			lastc ++;
-		}
+
+		Gdx.app.postRunnable(() -> {
+			if(c == '\n') lastc = 0;
+
+			buildLabel.getText().append(c);
+
+			if(lastc > 62){
+				buildLabel.getText().append("\n");
+				lastc = 0;
+			}else{
+				lastc ++;
+			}
+		});
 	}
 	
 	@Override

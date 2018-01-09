@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
+import io.anuke.ucore.UCore;
 
 public class BuildScriptHelper {
 
@@ -69,6 +70,7 @@ public class BuildScriptHelper {
 		write(wr, "box2DLightsVersion = '" + DependencyBank.box2DLightsVersion + "'");
 		write(wr, "ashleyVersion = '" + DependencyBank.ashleyVersion + "'");
 		write(wr, "aiVersion = '" + DependencyBank.aiVersion + "'");
+		write(wr, "uCoreVersion = '" + DependencyBank.uCoreVersion + "'");
 		write(wr, "}");
 		space(wr);
 		write(wr, "repositories {");
@@ -76,6 +78,7 @@ public class BuildScriptHelper {
 		write(wr, DependencyBank.mavenCentral);
 		write(wr, "maven { url \"" + DependencyBank.libGDXSnapshotsUrl + "\" }");
 		write(wr, "maven { url \"" + DependencyBank.libGDXReleaseUrl + "\" }");
+		write(wr, "maven { url 'https://jitpack.io' }");
 		write(wr, "}");
 		write(wr, "}");
 	}
@@ -97,13 +100,12 @@ public class BuildScriptHelper {
 		write(wr, "dependencies {");
 		if (!project.equals(ProjectType.CORE)) {
 			write(wr, "compile project(\":" + ProjectType.CORE.getName() + "\")");
-		}else{
-			write(wr, "compile fileTree(dir: '../core/lib', include: '*.jar')");
 		}
 		
 		for (Dependency dep : dependencyList) {
 			if (dep.getDependencies(project) == null) continue;
 			for (String moduleDependency : dep.getDependencies(project)) {
+				UCore.log(project + " ||| " + moduleDependency); //TODO fix dupes
 				if (moduleDependency == null) continue;
 				if ((project.equals(ProjectType.ANDROID) || project.equals(ProjectType.IOSMOE)) && moduleDependency.contains("native")) {
 					write(wr, "natives \"" + moduleDependency + "\"");

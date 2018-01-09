@@ -258,7 +258,6 @@ public class GdxSetup {
 
 		// core project
 		project.files.add(new ProjectFile(template, "core/build.gradle"));
-		project.files.add(new ProjectFile(template, "core/.classpath"));
 		
 		FileHandle src = Gdx.files.internal("templates/" + fromTemplate + "/files");
 		
@@ -288,7 +287,6 @@ public class GdxSetup {
 
 		// desktop project
 		if (builder.modules.contains(ProjectType.DESKTOP)) {
-			project.files.add(new ProjectFile(template, "desktop/classpath", "desktop/.classpath", true));
 			project.files.add(new ProjectFile(template, "desktop/build.gradle"));
 			project.files.add(new ProjectFile(template, "desktop/src/DesktopLauncher", "desktop/src/" + packageDir + "/desktop/DesktopLauncher.java", true));
 		}
@@ -299,7 +297,6 @@ public class GdxSetup {
 
 		// android project
 		if (builder.modules.contains(ProjectType.ANDROID)) {
-			project.files.add(new ProjectFile(template, "android/classpath", "android/.classpath", true));
 			project.files.add(new ProjectFile(template, "android/res/values/strings.xml"));
 			project.files.add(new ProjectFile(template, "android/res/values/styles.xml", false));
 			project.files.add(new ProjectFile(template, "android/res/drawable-hdpi/ic_launcher.png", false));
@@ -318,7 +315,6 @@ public class GdxSetup {
 
 		// html project
 		if (builder.modules.contains(ProjectType.HTML)) {
-			project.files.add(new ProjectFile(template, "html/.classpath"));
 			project.files.add(new ProjectFile(template, "html/build.gradle"));
 			project.files.add(new ProjectFile(template, "html/src/HtmlLauncher", "html/src/" + packageDir + "/client/HtmlLauncher.java", true));
 			project.files.add(new ProjectFile(template, "html/GdxDefinition", "html/src/" + packageDir + "/GdxDefinition.gwt.xml", true));

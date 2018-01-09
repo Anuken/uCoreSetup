@@ -17,6 +17,8 @@
 package com.badlogic.gdx.setup;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +27,8 @@ import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 public class ProjectBuilder {
 
 	DependencyBank bank;
-	List<ProjectType> modules = new ArrayList<ProjectType>();
-	List<Dependency> dependencies = new ArrayList<Dependency>();
+	List<ProjectType> modules = new ArrayList<>();
+	List<Dependency> dependencies = new ArrayList<>();
 	File settingsFile;
 	File buildFile;
 
@@ -35,7 +37,7 @@ public class ProjectBuilder {
 	}
 
 	public List<String> buildProject(List<ProjectType> projects, List<Dependency> dependencies) {
-		List<String> incompatibilities = new ArrayList<String>();
+		List<String> incompatibilities = new ArrayList<>();
 		for (Dependency dep : dependencies) {
 			for (ProjectType type : projects) {
 				dep.getDependencies(type);
@@ -68,6 +70,10 @@ public class ProjectBuilder {
 					settingsContents += ", ";
 				}
 			}
+			settingsContents += '\n';
+
+			settingsContents += new String(Files.readAllBytes(Paths.get("templates/base/settings.gradle")));
+
 			settingsBw.write(settingsContents);
 			settingsBw.close();
 			settingsWriter.close();
@@ -77,6 +83,7 @@ public class ProjectBuilder {
 
 			BuildScriptHelper.addBuildScript(modules, buildBw);
 			BuildScriptHelper.addAllProjects(buildBw);
+
 			for (ProjectType module : modules) {
 				BuildScriptHelper.addProject(module, dependencies, buildBw);
 			}

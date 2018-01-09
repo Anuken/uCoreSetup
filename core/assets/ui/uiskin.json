@@ -50,7 +50,7 @@ io.anuke.ucore.scene.ui.ImageTextButton$ImageTextButtonStyle: {
 },
 io.anuke.ucore.scene.ui.ScrollPane$ScrollPaneStyle: {
 	list: {vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal },
-	default: {background: border, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
+	default: {vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 },
 io.anuke.ucore.scene.ui.SelectBox$SelectBoxStyle: {
 	default: {background: default-select, scrollStyle: default, listStyle: {font: default-font, selection: padded-list-selection, background: select-box-list-bg}, font: default-font, fontColor: white, disabledFontColor: grey }

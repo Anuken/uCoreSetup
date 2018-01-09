@@ -13,8 +13,8 @@ import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 
 public class UI extends SceneModule{
-	VisibilityProvider play = ()->GameState.is(State.playing);
-	VisibilityProvider inmenu = ()->GameState.is(State.menu);
+	VisibilityProvider play = () -> GameState.is(State.playing);
+	VisibilityProvider inmenu = () -> GameState.is(State.menu);
 	
 	KeybindDialog keybind;
 	SettingsDialog settings;
@@ -49,21 +49,16 @@ public class UI extends SceneModule{
 		
 		paused.content().row();
 		
-		new button("Settings", ()->{
-			settings.show();
-		});
+		new button("Settings", settings::show);
 		
 		paused.content().row();
 		
-		new button("Controls", ()->{
-			keybind.show();
-		});
+		new button("Controls", keybind::show);
 		
 		paused.content().row();
 		
 		new button("Back to Menu", ()->{
 			paused.hide();
-			//TODO back to menu code
 			GameState.set(State.menu);
 		});
 		
@@ -75,35 +70,27 @@ public class UI extends SceneModule{
 			defaults().width(200);
 			
 			new button("Play", ()->{
-				//TODO playing setup code, call reset()
 				control.reset();
 				GameState.set(State.playing);
 			});
 			
 			row();
 			
-			new button("Settings", ()->{
-				settings.show();
-			});
+			new button("Settings", settings:show);
 			
 			row();
 			
-			new button("Controls", ()->{
-				keybind.show();
-			});
+			new button("Controls", keybind::show);
 			
 			row();
 			
-			new button("About", ()->{
-				about.show();
-			});
+			new button("About", about::show);
 			
 			row();
 			
-			if(Gdx.app.getType() == ApplicationType.Desktop)
-			new button("Exit", ()->{
-				Gdx.app.exit();
-			});
+			if(Gdx.app.getType() == ApplicationType.Desktop){
+			    new button("Exit", Gdx.app::exit;
+			}
 			
 			visible(inmenu);
 		}}.end();

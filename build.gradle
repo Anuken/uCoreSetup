@@ -6,8 +6,6 @@ buildscript {
         maven { url 'https://jitpack.io' }
         jcenter()
     }
-    dependencies {
-    }
 }
 
 allprojects {
@@ -17,11 +15,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = "uCoreSetup"
-        gdxVersion = '1.9.6'
-        roboVMVersion = '2.3.0'
-        box2DLightsVersion = '1.4'
-        ashleyVersion = '1.7.0'
-        aiVersion = '1.8.0'
+        gdxVersion = '1.9.8'
     }
 
     repositories {
@@ -40,6 +34,7 @@ project(":desktop") {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
     }
 }
 
@@ -48,9 +43,9 @@ project(":core") {
 
 
     dependencies {
-        compile fileTree(dir: '../core/lib', include: '*.jar')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        compile project(":uCore")
     }
 }
 
