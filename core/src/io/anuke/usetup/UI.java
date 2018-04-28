@@ -14,11 +14,13 @@ import com.badlogic.gdx.setup.Executor.CharCallback;
 
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.Core;
+import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Strings;
 
 public class UI extends SceneModule{
@@ -49,8 +51,6 @@ public class UI extends SceneModule{
 		dependencies.add(ProjectDependency.GDX);
 		dependencies.add(ProjectDependency.CONTROLLERS);
 		dependencies.add(ProjectDependency.UCORE);
-
-		UCore.log(dependencies);
 		
 		Gdx.graphics.setContinuousRendering(false);
 		
@@ -272,7 +272,7 @@ public class UI extends SceneModule{
 		
 		buildDialog.content().add(pane).grow().padTop(8);
 		
-		new Thread(()->{
+		new Thread(() -> {
 			printlog("Generating app in " + destination + "...");
 
 			try {
@@ -329,7 +329,7 @@ public class UI extends SceneModule{
 	
 	@Override
 	public void update(){
-		clearScreen(Color.BLACK);
+		Graphics.clear(Color.BLACK);
 		super.update();
 		Timers.update();
 	}

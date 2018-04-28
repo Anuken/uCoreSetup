@@ -105,7 +105,6 @@ public class BuildScriptHelper {
 		for (Dependency dep : dependencyList) {
 			if (dep.getDependencies(project) == null) continue;
 			for (String moduleDependency : dep.getDependencies(project)) {
-				UCore.log(project + " ||| " + moduleDependency); //TODO fix dupes
 				if (moduleDependency == null) continue;
 				if ((project.equals(ProjectType.ANDROID) || project.equals(ProjectType.IOSMOE)) && moduleDependency.contains("native")) {
 					write(wr, "natives \"" + moduleDependency + "\"");

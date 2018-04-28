@@ -28,6 +28,7 @@ import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 import com.badlogic.gdx.setup.Executor.CharCallback;
 
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.util.Log;
 
 /** Command line tool to generate libgdx projects
  * @author badlogic
@@ -496,8 +497,6 @@ public class GdxSetup {
 	private void copyFile (ProjectFile file, File out, Map<String, String> values) {
 		File outFile = new File(out, file.outputName);
 		
-		UCore.log("Copying", file.resourceLoc + file.resourceName, "to", outFile);
-		
 		if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
 			throw new RuntimeException("Couldn't create dir '" + outFile.getAbsolutePath() + "'");
 		}
@@ -511,9 +510,6 @@ public class GdxSetup {
 			} else {
 				txt = readResourceAsString(file.resourceName, file.resourceLoc);
 			}
-			
-			if(txt.contains("test.pack"))
-				UCore.log(outFile.getAbsolutePath());
 			
 			txt = replace(txt, values);
 			writeFile(outFile, txt);
