@@ -30,7 +30,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
     from files(project.assetsDir);
@@ -79,16 +79,17 @@ task packrCmd(type: Exec) {
         from "build/libs/desktop-release.jar"
     }
 
-    commandLine "java", "-jar", PACKR_DIR+"packr.jar",
+    commandLine("java", "-jar", PACKR_DIR + "packr.jar",
             "--verbose",
-            "--bundle", getPackage(),
+            "--bundle", getPackage() + ".mac",
             "--platform", getPlatform(),
             "--executable", appName,
             "--output", "packr-out/",
             "--mainclass", project.ext.mainClassName,
-            "--jdk", PACKR_DIR+"jdk-"+getPlatform()+".zip",
+            "--jdk", PACKR_DIR + "jdk-" + getPlatform() + ".zip",
             "--icon", ICON_DIR.getAbsolutePath(),
-            "--classpath", "--", PACKR_DIR+"config.json"
+            "--vmargs", (getPlatform().equals("mac") ? "XstartOnFirstThread" : "Xms256m"),
+            "--classpath", "--", PACKR_DIR + "config.json")
 
 }
 

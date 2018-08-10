@@ -15,5 +15,7 @@ public class AboutDialog extends Dialog{
             content().add(s);
             content().row();
         }
+
+        addCloseButton();
     }
 }

@@ -9,6 +9,7 @@ import %PACKAGE%.GameState.State;
 import %PACKAGE%.dialogs.*;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.modules.SceneModule;
+import io.anuke.ucore.scene.Skin;
 import io.anuke.ucore.scene.ui.*;
 
 public class UI extends SceneModule{
@@ -18,7 +19,12 @@ public class UI extends SceneModule{
     public TutorialDialog tutorial;
     public PausedDialog paused;
 
-    public UI(){
+    protected void loadSkin(){
+        skin = new Skin(Gdx.files.internal("ui/uiskin.json"), Core.atlas);
+    }
+
+    @Override
+    public void init(){
         Core.font.setUseIntegerPositions(true);
 
         keybind = new KeybindDialog();
@@ -26,10 +32,7 @@ public class UI extends SceneModule{
         about = new AboutDialog();
         tutorial = new TutorialDialog();
         paused = new PausedDialog();
-    }
 
-    @Override
-    public void init(){
         scene.table(menu -> {
             menu.defaults().width(200f);
 

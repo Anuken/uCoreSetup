@@ -1,6 +1,7 @@
 package %PACKAGE%;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import static %PACKAGE%.Vars.*;
 import %PACKAGE%.GameState.State;
@@ -18,6 +19,7 @@ import io.anuke.ucore.modules.RendererModule;
 public class Control extends RendererModule{
 	
 	public Control(){
+	    Core.batch = new SpriteBatch();
 		Core.atlas = new Atlas("sprites.atlas");
 	
 		KeyBinds.defaults(
