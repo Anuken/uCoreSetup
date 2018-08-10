@@ -52,6 +52,7 @@ public class BuildScriptHelper {
 		if (projects.contains(ProjectType.IOSMOE)) {
 			write(wr, "classpath '" + DependencyBank.moePluginImport + "'");
 		}
+		write(wr, "classpath \"com.badlogicgames.gdx:gdx-tools:1.9.8\"");
 		write(wr, "}");
 		write(wr, "}");
 		space(wr);

@@ -5,19 +5,12 @@ sourceCompatibility = 1.8
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-def TEXPACK_DIR = "$System.env.TEXPACK_DIR"
-
-task packSprites(type: Exec){
-	commandLine "java", "-cp", TEXPACK_DIR, "com.badlogic.gdx.tools.texturepacker.TexturePacker", "assets-raw/sprites/", "assets/sprites/", "sprites.atlas"
-}
-
-task packUI(type: Exec){
-	commandLine "java", "-cp", TEXPACK_DIR, "com.badlogic.gdx.tools.texturepacker.TexturePacker", "assets-raw/ui/", "assets/ui/", "uiskin.atlas"
-}
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
 
 task pack(){
-	dependsOn 'packSprites'
-	dependsOn 'packUI'
+	doLast{
+		TexturePacker.process("core/assets-raw/sprites/", "core/assets/sprites/", "sprites.atlas")
+	}
 }
 
 eclipse.project {

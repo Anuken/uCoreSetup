@@ -137,7 +137,7 @@ public class UI extends SceneModule{
 					int idx = i;
 
 					current.addCheck(Strings.capitalize(depend[i].name().toLowerCase()),
-					dependencies.contains(depend[i]), b->{
+					dependencies.contains(depend[i]), b -> {
 						if(b){
 							if(!dependencies.contains(depend[idx])) dependencies.add(depend[idx]);
 						}else{
