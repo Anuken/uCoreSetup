@@ -23,8 +23,7 @@ public class DependencyBank {
 
 	//Versions
 	static String libgdxVersion = "1.9.8";
-	//Temporary snapshot version, we need a more dynamic solution for pointing to the latest nightly
-	static String libgdxNightlyVersion = "1.9.8-SNAPSHOT";
+	static String libgdxNightlyVersion = "1.9.9-SNAPSHOT";
 	static String roboVMVersion = "2.3.0";
 	static String moeVersion = "1.3.2";
 	static String buildToolsVersion = "23.0.1";
@@ -41,7 +40,7 @@ public class DependencyBank {
 
 	//Project plugins
 	static String gwtPluginImport = "org.wisepersist:gwt-gradle-plugin:1.0.1";
-	static String androidPluginImport = "com.android.tools.build:gradle:3.0.1";
+	static String androidPluginImport = "com.android.tools.build:gradle:3.1.3";
 	static String roboVMPluginImport = "com.mobidevelop.robovm:robovm-gradle-plugin:" + roboVMVersion;
 	static String moePluginImport = "org.multi-os-engine:moe-gradle:" + moeVersion;
 	
@@ -91,17 +90,6 @@ public class DependencyBank {
 			new String[]{"com.badlogic.gdx.backends.gdx_backends_gwt"},
 			
 			"Core Library for LibGDX"
-		),
-		UCORE(
-				new String[]{"com.github.anuken:ucore:$uCoreVersion"},
-				new String[]{},
-				new String[]{},
-				new String[]{},
-				new String[]{},
-				new String[]{},
-				new String[]{},
-
-				"Base uCore library"
 		),
 		BULLET(
 			new String[]{"com.badlogicgames.gdx:gdx-bullet:$gdxVersion"},

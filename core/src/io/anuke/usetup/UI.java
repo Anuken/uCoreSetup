@@ -10,17 +10,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.setup.*;
 import com.badlogic.gdx.setup.DependencyBank.ProjectDependency;
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
-import com.badlogic.gdx.setup.Executor.CharCallback;
-
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.modules.SceneModule;
-import io.anuke.ucore.scene.builders.*;
+import io.anuke.ucore.scene.Element;
+import io.anuke.ucore.scene.event.InputEvent;
+import io.anuke.ucore.scene.event.InputListener;
 import io.anuke.ucore.scene.ui.*;
 import io.anuke.ucore.scene.ui.layout.Table;
-import io.anuke.ucore.util.Log;
 import io.anuke.ucore.util.Strings;
 
 public class UI extends SceneModule{
@@ -50,88 +48,59 @@ public class UI extends SceneModule{
 		
 		dependencies.add(ProjectDependency.GDX);
 		dependencies.add(ProjectDependency.CONTROLLERS);
-		dependencies.add(ProjectDependency.UCORE);
 		
 		Gdx.graphics.setContinuousRendering(false);
-		
-		build.begin();
-		
-		new table("button"){{
-			
-			row();
-			
-			new table(){{
-			
-				defaults().padTop(8);
-				
-				new label("Name: ").left();
-				
+
+		scene.table("button", t -> {
+
+			t.row();
+
+			t.table(prefs -> {
 				float fw = 400;
-				
-				new field(projectName, name->{
-					projectName = name;
-				}).width(fw);
-				
-				row();
-				
-				new label("Package: ").left();
-				
-				new field(packageName, name->{
-					packageName = name;
-				}).width(fw);
-				
-				row();
-				
-				new label("Destination: ");
-				
-				new field(destination, name->{
-					destination = name;
-				}).width(fw);
-			
-			}}.end();
-			
-			row();
-			
-			new table("button"){{
-				marginTop(12);
-				margin(14);
-				aleft();
-				
-				new label("Template:").left().padBottom(6).left();
-				
-				row();
-				
-				new table(){{
+
+				prefs.defaults().padTop(8);
+
+				prefs.add("Name: ").left();
+				prefs.addField(projectName, name -> projectName = name).width(fw);
+				prefs.row();
+
+				prefs.add("Package: ").left();
+				prefs.addField(packageName, name -> packageName = name).width(fw);
+				prefs.row();
+
+				prefs.add("Destination: ");
+				prefs.addField(destination, name -> destination = name).width(fw);
+			});
+
+			t.row();
+
+			t.table("button", temp -> {
+				temp.marginTop(12).margin(14f).left();
+				temp.add("Template:").left().padBottom(6).left();
+
+				temp.row();
+				temp.table(groups -> {
 					ButtonGroup<CheckBox> group = new ButtonGroup<>();
-					
+
 					for(String type : templates){
-						new checkbox(Strings.capitalize(type), 
-								type.equals(template), b->{
-									
-							template = type;
-						}){{
-							group.add(get());
-						}}.pad(4).left().padRight(8).padLeft(0).fill();
+						groups.addCheck(Strings.capitalize(type), type.equals(template), b -> template = type)
+							.group(group).pad(4).left().padRight(8).padLeft(0).fill();
 					}
-				}}.end();
-				
-			}}.fillX().end();
-			
-			row();
-			
-			new table("button"){{
-				marginTop(12);
-				margin(14);
-				aleft();
-				
-				new label("Sub-projects:").left().padBottom(6).left();
-				
-				row();
-				
-				new table(){{
+				});
+			});
+
+			t.row();
+
+			t.table("button", proj -> {
+				proj.marginTop(12).margin(14f).left();
+
+				proj.add("Sub-projects:").left().padBottom(6).left();
+				proj.row();
+
+				proj.table(c -> {
 					for(ProjectType type : ProjectType.values()){
-						new checkbox(Strings.capitalize(type.getName()), 
-								projects.contains(type), b->{
+						c.addCheck(Strings.capitalize(type.getName()),
+						projects.contains(type), b->{
 							if(b){
 								projects.add(type);
 							}else{
@@ -139,37 +108,36 @@ public class UI extends SceneModule{
 							}
 						}).pad(4).left().padRight(8).padLeft(0);
 					}
-				}}.end();
-				
-			}}.fillX().end();
-			
-			row();
-			
-			new table("button"){{
-				marginTop(12);
-				margin(14);
-				
-				new label("Extensions:").left().padBottom(6);
-				
-				row();
-				
+				});
+
+			}).fillX();
+
+			t.row();
+
+			t.table("button", ext -> {
+				ext.margin(14);
+
+				ext.add("Extensions:").left().padBottom(6);
+
+				ext.row();
+
 				ProjectDependency[] depend = ProjectDependency.values();
 				int amount = ProjectDependency.values().length;
 				int max = 5;
-				
+
 				Table current = new Table();
-				
-				add(current);
-				
+
+				ext.add(current);
+
 				for(int i = 0 ; i < amount; i ++){
 					if(i % max == 0){
 						current.row();
 					}
-					
+
 					int idx = i;
-					
-					current.addCheck(Strings.capitalize(depend[i].name().toLowerCase()), 
-							dependencies.contains(depend[i]), b->{
+
+					current.addCheck(Strings.capitalize(depend[i].name().toLowerCase()),
+					dependencies.contains(depend[i]), b->{
 						if(b){
 							if(!dependencies.contains(depend[idx])) dependencies.add(depend[idx]);
 						}else{
@@ -177,40 +145,25 @@ public class UI extends SceneModule{
 						}
 					}).left().pad(4).padLeft(0);
 				}
-				
-			}}.fillX().end();
-			
-			row();
-			
-			new button("Generate", ()->{
-				generate();
-			}).padTop(10).fill().height(60);
-			
-		}}.end();
+
+			}).fillX();
+
+			t.row();
+
+			t.addButton("Generate", this::generate).padTop(10).fill().height(60);
+		});
+
+		scene.table(t -> t.top().add("uCore Project Setup").padTop(12).color(Color.CORAL).get().setFontScale(1f));
 		
-		new table(){{
-			atop().aright();
-			
-			marginTop(0).marginRight(0);
-			
+		scene.table(t -> {
 			float sz = 50;
+
+			t.top().right();
+			t.marginTop(0).marginRight(0);
 			
-			new button("-", ()->{
-				graphics.getWindow().iconifyWindow();
-			}).size(sz);
-			
-			new button("X", ()->{
-				Gdx.app.exit();
-			}).size(sz);
-			
-		}}.end();
-		
-		new table(){{
-			atop();
-			new label("uCore Project Setup").scale(1f).padTop(12).color(Color.CORAL);
-		}}.end();
-		
-		build.end();
+			t.addButton("-", graphics.getWindow()::iconifyWindow).size(sz);
+			t.addButton("X", Gdx.app::exit).size(sz);
+		});
 	}
 	
 	void generate(){
@@ -264,7 +217,7 @@ public class UI extends SceneModule{
 		buildDialog = new Dialog("Project Log", "dialog");
 		buildLabel = new Label("");
 
-		Table inner = new Table();
+		Table inner = new Table().margin(20);
 		inner.add(buildLabel);
 
 		ScrollPane pane = new ScrollPane(inner);
@@ -296,8 +249,8 @@ public class UI extends SceneModule{
 				buildDialog.content().invalidateHierarchy();
 				buildDialog.pack();
 				
-				buildDialog.buttons().addButton("OK", buildDialog::hide);
-				buildDialog.buttons().addButton("Exit", Gdx.app::exit);
+				buildDialog.buttons().addButton("OK", buildDialog::hide).width(100f);
+				buildDialog.buttons().addButton("Exit", Gdx.app::exit).width(100f);
 			});
 		}).start();
 		

@@ -6,112 +6,52 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 
 import %PACKAGE%.GameState.State;
-import io.anuke.ucore.core.DrawContext;
-import io.anuke.ucore.function.VisibilityProvider;
+import %PACKAGE%.dialogs.*;
+import io.anuke.ucore.core.Core;
 import io.anuke.ucore.modules.SceneModule;
-import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.*;
 
 public class UI extends SceneModule{
-	VisibilityProvider play = () -> GameState.is(State.playing);
-	VisibilityProvider inmenu = () -> GameState.is(State.menu);
-	
-	KeybindDialog keybind;
-	SettingsDialog settings;
-	TextDialog about;
-	TextDialog tutorial;
-	Dialog paused;
-	
-	@Override
-	public void init(){
-		Core.font.setUseIntegerPositions(true);
-		
-		paused = new Dialog("Paused", "dialog");
-		
-		about = new TextDialog("About", aboutText).padText(10);
-		about.left();
-		tutorial = new TextDialog("Tutorial", tutorialText).padText(10);
-		
-		keybind = new KeybindDialog();
-		settings = new SettingsDialog();
-		
-		settings.volumePrefs();
-		settings.screenshakePref();
-		
-		build.begin(paused.content());
-		
-		paused.content().defaults().width(200);
-		
-		new button("Resume", ()->{
-			GameState.set(State.playing);
-			paused.hide();
-		});
-		
-		paused.content().row();
-		
-		new button("Settings", settings::show);
-		
-		paused.content().row();
-		
-		new button("Controls", keybind::show);
-		
-		paused.content().row();
-		
-		new button("Back to Menu", ()->{
-			paused.hide();
-			GameState.set(State.menu);
-		});
-		
-		build.end();
-		
-		build.begin(scene);
-		
-		new table(){{
-			defaults().width(200);
-			
-			new button("Play", ()->{
-				control.reset();
-				GameState.set(State.playing);
-			});
-			
-			row();
-			
-			new button("Settings", settings:show);
-			
-			row();
-			
-			new button("Controls", keybind::show);
-			
-			row();
-			
-			new button("About", about::show);
-			
-			row();
-			
-			if(Gdx.app.getType() == ApplicationType.Desktop){
-			    new button("Exit", Gdx.app::exit;
-			}
-			
-			visible(inmenu);
-		}}.end();
-		
-		new table(){{
-			atop();
-			
-			new label("%APP_NAME%").scale(2);
-			
-			visible(inmenu);
-		}}.end();
-		
-		build.end();
-	}
-	
-	public void hidePaused(){
-		paused.hide();
-	}
-	
-	public void showPaused(){
-		paused.show();
-	}
-	
+    public KeybindDialog keybind;
+    public SettingsMenuDialog settings;
+    public AboutDialog about;
+    public TutorialDialog tutorial;
+    public PausedDialog paused;
+
+    public UI(){
+        Core.font.setUseIntegerPositions(true);
+
+        keybind = new KeybindDialog();
+        settings = new SettingsMenuDialog();
+        about = new AboutDialog();
+        tutorial = new TutorialDialog();
+        paused = new PausedDialog();
+    }
+
+    @Override
+    public void init(){
+        scene.table(menu -> {
+            menu.defaults().width(200f);
+
+            menu.addButton("Play", () -> {
+               control.reset();
+               GameState.set(State.playing);
+            });
+
+            menu.row();
+            menu.addButton("Settings", settings::show);
+            menu.row();
+            menu.addButton("Controls", keybind::show);
+            menu.row();
+            menu.addButton("About", about::show);
+            menu.row();
+
+            if(Gdx.app.getType() == ApplicationType.Desktop){
+                menu.addButton("Exit", Gdx.app::exit);
+            }
+        }).visible(() -> GameState.is(State.menu));
+
+        scene.table(header -> header.top().add("%APP_NAME%").get().setFontScale(2)).visible(() -> GameState.is(State.menu));
+    }
+
 }

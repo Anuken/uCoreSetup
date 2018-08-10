@@ -100,6 +100,19 @@ public class BuildScriptHelper {
 		write(wr, "dependencies {");
 		if (!project.equals(ProjectType.CORE)) {
 			write(wr, "compile project(\":" + ProjectType.CORE.getName() + "\")");
+		}else{
+			write(wr, "        def comp = System.properties[\"release\"] == null || System.properties[\"release\"] == \"false\"\n" +
+			"        if(!comp) println(\"Note: Compiling release build.\")\n" +
+			"\n" +
+			"        if(new File(projectDir.parent, '../uCore').exists() && comp){\n" +
+			"            compile project(\":uCore\")\n" +
+			"        }else{\n" +
+			"            compile \"com.github.anuken:ucore:$uCoreVersion\"\n" +
+			"        }\n" +
+			"\n" +
+			"        if(new File(projectDir.parent, '../GDXGifRecorder').exists() && comp) {\n" +
+			"            compile project(\":GDXGifRecorder\")\n" +
+			"        }");
 		}
 		
 		for (Dependency dep : dependencyList) {

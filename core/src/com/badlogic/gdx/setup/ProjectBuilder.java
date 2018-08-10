@@ -64,9 +64,10 @@ public class ProjectBuilder {
 			FileWriter settingsWriter = new FileWriter(settingsFile.getAbsoluteFile());
 			BufferedWriter settingsBw = new BufferedWriter(settingsWriter);
 			String settingsContents = "include ";
+			int i = 0;
 			for (ProjectType module : modules) {
 				settingsContents += "'" + module.getName() + "'";
-				if (modules.indexOf(module) != modules.size() - 1) {
+				if (i ++ != modules.size() - 1) {
 					settingsContents += ", ";
 				}
 			}
