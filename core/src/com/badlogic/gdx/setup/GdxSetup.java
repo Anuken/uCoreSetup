@@ -27,9 +27,6 @@ import com.badlogic.gdx.setup.DependencyBank.ProjectDependency;
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
 import com.badlogic.gdx.setup.Executor.CharCallback;
 
-import io.anuke.ucore.UCore;
-import io.anuke.ucore.util.Log;
-
 /** Command line tool to generate libgdx projects
  * @author badlogic
  * @author Tomski */

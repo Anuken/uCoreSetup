@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.List;
 
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
-import io.anuke.ucore.UCore;
 
 public class BuildScriptHelper {
 
